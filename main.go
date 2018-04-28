@@ -11,13 +11,9 @@ import (
 	"strconv"
 )
 
-const (
-	default_name = "City"
-	default_x = 0
-	default_y = 0
-)
+const default_name = "City"
 
-func check(e error){
+func check(e error) {
 	if e != nil {
 		panic(e)
 	}
@@ -35,8 +31,6 @@ func main() {
 
 	//Feels good mate!
 	log.Println(getDistance(cityTour))
-
-
 }
 
 /* ===== CITY ===== */
@@ -46,12 +40,6 @@ type city struct {
 	x    float64
 	y    float64
 	name string
-}
-
-func defaultCity() city {
-	/* SideNote: Since Go is not technically OOP, you can't declare default values
-				within the struct.  This feels super salty, but hey whatever.*/
-	return city{0,0,"Default_City"}
 }
 
 func distance(c1 city, c2 city) int64 {
@@ -73,7 +61,7 @@ func toString(c city) string {
 //Note: the city needed can be obtained through accessing the path
 //		directly rather than making a method.
 type tour struct {
-	path[] city
+	path [] city
 }
 
 func addCity(t *tour, c city) {
@@ -88,9 +76,9 @@ func numberOfCities(t tour) int64 {
 func populateTour(coords cityCoordinates) tour {
 	t := tour{}
 	for i, cityCoordX := range coords.cityX { //X same length as Y
-		tempX, err := strconv.ParseFloat(cityCoordX,64)
+		tempX, err := strconv.ParseFloat(cityCoordX, 64)
 		check(err)
-		tempY, err := strconv.ParseFloat(coords.cityY[i],64)
+		tempY, err := strconv.ParseFloat(coords.cityY[i], 64)
 		check(err)
 		t.path = append(t.path, city{tempX, tempY, default_name})
 	}
@@ -102,7 +90,7 @@ func getDistance(t tour) int64 {
 	for i, c := range t.path {
 		destination := city{}
 
-		if (int64(i + 1) < numberOfCities(t)) {
+		if int64(i+1) < numberOfCities(t) {
 			destination = t.path[i+1]
 		} else {
 			destination = t.path[0]
@@ -110,18 +98,14 @@ func getDistance(t tour) int64 {
 
 		totalDistance += distance(c, destination)
 	}
-
+	return totalDistance
 }
-
-/* ===== TOUR MANAGER ===== */
-
-
 
 /* ===== COORDINATE FILE GRABBER STUFF ===== */
 
 type cityCoordinates struct {
-	cityX[] string
-	cityY[] string
+	cityX [] string
+	cityY [] string
 }
 
 //Heart palpitations ensued as I wrote this.
@@ -138,11 +122,10 @@ func readCityDocument(fileName string) cityCoordinates {
 
 		if unicode.IsDigit(tempRune[0]) {
 			//Break them coords apart without breaking my neck
-			tempCoords:= strings.Fields(scanStr)
+			tempCoords := strings.Fields(scanStr)
 			cities.cityX = append(cities.cityX, tempCoords[1])
 			cities.cityY = append(cities.cityY, tempCoords[2])
 		}
 	}
-
 	return cities
 }
