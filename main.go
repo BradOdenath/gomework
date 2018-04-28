@@ -6,7 +6,6 @@ import (
 	"os"
 	"bufio"
 	"unicode"
-	"fmt"
 	"strings"
 )
 
@@ -68,23 +67,21 @@ func createTour() tour {
 }
 */
 
-/* ===== FILE READER AND CITY LIST ===== */
+/* ===== FILE READER FOR COORDINATES AND CITYLIST ===== */
 
 type cityList struct {
 	cityX[] string
 	cityY[] string
 }
 
-func readCityDocument(fileName string) (string) {
-	//file, err := ioutil.ReadFile(fileName)
-
+func readCityDocument(fileName string) cityList {
 	cities := cityList{}
 
 	file, err := os.Open(fileName)
 	check(err)
 	defer file.Close()
 
-	outStr := ""
+	//outStr := ""
 
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
@@ -99,11 +96,13 @@ func readCityDocument(fileName string) (string) {
 			cities.cityX = append(cities.cityX, tempCoords[1])
 			cities.cityY = append(cities.cityY, tempCoords[2])
 		}
-
-		fmt.Println(outStr)
-
 	}
 
-	return outStr
+	// Testing Purposes
+	/*
+	log.Println("\n", cities.cityX)
+	log.Println("\n", cities.cityY)
+	*/
 
-	}
+	return cities
+}
